@@ -8,7 +8,10 @@ class CrmTeam(models.Model):
 
     so_release_strategy_id = fields.Many2one(
         'so.release.strategy', string='Release Strategy',
-        ondelete='restrict', check_company=True, tracking=True,
+        # No check_company: in Odoo 17 it injects a domain on company_id, which
+        # the sales team views restrict to multi-company users. The domain below
+        # and _check_so_release_strategy_company enforce the same rule.
+        ondelete='restrict', tracking=True,
         domain="[('id', 'in', so_release_allowed_strategy_ids)]",
         help='Default release strategy of the team. It is applied automatically '
              'to the sales orders of the team: no strategy has to be selected '
@@ -60,6 +63,17 @@ class CrmTeam(models.Model):
     # ------------------------------------------------------------------
     # Constraints
     # ------------------------------------------------------------------
+    @api.constrains('so_release_strategy_id', 'company_id')
+    def _check_so_release_strategy_company(self):
+        for team in self:
+            strategy = team.sudo().so_release_strategy_id
+            if strategy and team.company_id and strategy.company_id != team.company_id:
+                raise ValidationError(_(
+                    'The release strategy "%(strategy)s" belongs to %(strategy_company)s, '
+                    'but sales team %(team)s belongs to %(team_company)s.',
+                    strategy=strategy.name, strategy_company=strategy.company_id.name,
+                    team=team.display_name, team_company=team.company_id.name))
+
     @api.constrains('so_release_strategy_id')
     def _check_so_release_strategy(self):
         """Prevent removing (or mis-assigning) the strategy of a team while one

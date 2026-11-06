@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 16.0\n"
+"Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-06 14:00+0000\n"
 "PO-Revision-Date: 2026-11-06 14:00+0000\n"
@@ -79,11 +79,6 @@ msgid ""
 msgstr ""
 "<i class=\"fa fa-times\" role=\"img\" aria-label=\"مرفوض\" title=\"مرفوض\"/>\n"
 "                    <span>تم رفض الاعتماد. قم بتحديث الأمر ثم اطلب الاعتماد مرة أخرى.</span>"
-
-#. module: so_release_strategy
-#: model_terms:ir.ui.view,arch_db:so_release_strategy.res_config_settings_view_form_so_release
-msgid "<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-specific.\" groups=\"base.group_multi_company\"/>"
-msgstr "<span class=\"fa fa-lg fa-building-o\" title=\"القيم المحددة هنا خاصة بالشركة.\" groups=\"base.group_multi_company\"/>"
 
 #. module: so_release_strategy
 #. odoo-python
@@ -470,6 +465,7 @@ msgstr "إذا كان محدداً، فهناك رسائل جديدة تحتاج
 
 #. module: so_release_strategy
 #: model:ir.model.fields,help:so_release_strategy.field_so_release_strategy__message_has_error
+#: model:ir.model.fields,help:so_release_strategy.field_so_release_strategy__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr "إذا كان محدداً، فقد حدث خطأ في تسليم بعض الرسائل."
 
@@ -487,14 +483,6 @@ msgstr "المستخدم الحالي معتمِد"
 #: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy__message_is_follower
 msgid "Is Follower"
 msgstr "متابع"
-
-#. module: so_release_strategy
-#: model:ir.model.fields,field_description:so_release_strategy.field_sale_order_release_line____last_update
-#: model:ir.model.fields,field_description:so_release_strategy.field_so_release_action_wizard____last_update
-#: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy____last_update
-#: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy_rule____last_update
-msgid "Last Modified on"
-msgstr "آخر تعديل في"
 
 #. module: so_release_strategy
 #: model:ir.model.fields,field_description:so_release_strategy.field_sale_order_release_line__write_uid
@@ -527,11 +515,6 @@ msgstr "حقل قابل للقفل"
 #: model_terms:ir.ui.view,arch_db:so_release_strategy.so_release_strategy_view_form
 msgid "Locked Fields"
 msgstr "الحقول المقفلة"
-
-#. module: so_release_strategy
-#: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy__message_main_attachment_id
-msgid "Main Attachment"
-msgstr "المرفق الرئيسي"
 
 #. module: so_release_strategy
 #: model:ir.model.fields,field_description:so_release_strategy.field_sale_order_release_line__max_amount
@@ -1067,6 +1050,11 @@ msgstr ""
 "                                الأوامر التي لا ينطبق مبلغها على أي قاعدة تُؤكد مباشرة."
 
 #. module: so_release_strategy
+#: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "خطأ في تسليم الرسائل النصية"
+
+#. module: so_release_strategy
 #: model:ir.model,name:so_release_strategy.model_sale_advance_payment_inv
 msgid "Sales Advance Payment Invoice"
 msgstr "فاتورة الدفعة المقدمة للمبيعات"
@@ -1314,6 +1302,13 @@ msgstr "تم اعتماد الأمر مرة أخرى."
 
 #. module: so_release_strategy
 #. odoo-python
+#: code:addons/so_release_strategy/models/crm_team.py:0
+#, python-format
+msgid "The release strategy \"%(strategy)s\" belongs to %(strategy_company)s, but sales team %(team)s belongs to %(team_company)s."
+msgstr "استراتيجية الاعتماد \"%(strategy)s\" تتبع الشركة %(strategy_company)s، بينما فريق المبيعات %(team)s يتبع الشركة %(team_company)s."
+
+#. module: so_release_strategy
+#. odoo-python
 #: code:addons/so_release_strategy/models/sale_order.py:0
 #, python-format
 msgid "The release strategy \"%(strategy)s\" of sales team %(team)s belongs to another company than sales order %(order)s."
@@ -1371,6 +1366,16 @@ msgstr "بانتظار"
 #: model_terms:ir.ui.view,arch_db:so_release_strategy.view_sales_order_filter_so_release
 msgid "Waiting Release"
 msgstr "بانتظار الاعتماد"
+
+#. module: so_release_strategy
+#: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy__website_message_ids
+msgid "Website Messages"
+msgstr "رسائل الموقع"
+
+#. module: so_release_strategy
+#: model:ir.model.fields,help:so_release_strategy.field_so_release_strategy__website_message_ids
+msgid "Website communication history"
+msgstr "سجل تواصل الموقع"
 
 #. module: so_release_strategy
 #: model:ir.model.fields,help:so_release_strategy.field_so_release_strategy__lock_confirmed_policy

@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 16.0\n"
+"Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-06 14:00+0000\n"
 "PO-Revision-Date: 2026-11-06 14:00+0000\n"
@@ -69,11 +69,6 @@ msgstr ""
 msgid ""
 "<i class=\"fa fa-times\" role=\"img\" aria-label=\"Rejected\" title=\"Rejected\"/>\n"
 "                    <span>The release was rejected. Update the order and request the approval again.</span>"
-msgstr ""
-
-#. module: so_release_strategy
-#: model_terms:ir.ui.view,arch_db:so_release_strategy.res_config_settings_view_form_so_release
-msgid "<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-specific.\" groups=\"base.group_multi_company\"/>"
 msgstr ""
 
 #. module: so_release_strategy
@@ -458,6 +453,7 @@ msgstr ""
 
 #. module: so_release_strategy
 #: model:ir.model.fields,help:so_release_strategy.field_so_release_strategy__message_has_error
+#: model:ir.model.fields,help:so_release_strategy.field_so_release_strategy__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
 
@@ -474,14 +470,6 @@ msgstr ""
 #. module: so_release_strategy
 #: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy__message_is_follower
 msgid "Is Follower"
-msgstr ""
-
-#. module: so_release_strategy
-#: model:ir.model.fields,field_description:so_release_strategy.field_sale_order_release_line____last_update
-#: model:ir.model.fields,field_description:so_release_strategy.field_so_release_action_wizard____last_update
-#: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy____last_update
-#: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy_rule____last_update
-msgid "Last Modified on"
 msgstr ""
 
 #. module: so_release_strategy
@@ -514,11 +502,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy__locked_field_ids
 #: model_terms:ir.ui.view,arch_db:so_release_strategy.so_release_strategy_view_form
 msgid "Locked Fields"
-msgstr ""
-
-#. module: so_release_strategy
-#: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy__message_main_attachment_id
-msgid "Main Attachment"
 msgstr ""
 
 #. module: so_release_strategy
@@ -1050,6 +1033,11 @@ msgid ""
 msgstr ""
 
 #. module: so_release_strategy
+#: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: so_release_strategy
 #: model:ir.model,name:so_release_strategy.model_sale_advance_payment_inv
 msgid "Sales Advance Payment Invoice"
 msgstr ""
@@ -1297,6 +1285,13 @@ msgstr ""
 
 #. module: so_release_strategy
 #. odoo-python
+#: code:addons/so_release_strategy/models/crm_team.py:0
+#, python-format
+msgid "The release strategy \"%(strategy)s\" belongs to %(strategy_company)s, but sales team %(team)s belongs to %(team_company)s."
+msgstr ""
+
+#. module: so_release_strategy
+#. odoo-python
 #: code:addons/so_release_strategy/models/sale_order.py:0
 #, python-format
 msgid "The release strategy \"%(strategy)s\" of sales team %(team)s belongs to another company than sales order %(order)s."
@@ -1353,6 +1348,16 @@ msgstr ""
 #. module: so_release_strategy
 #: model_terms:ir.ui.view,arch_db:so_release_strategy.view_sales_order_filter_so_release
 msgid "Waiting Release"
+msgstr ""
+
+#. module: so_release_strategy
+#: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: so_release_strategy
+#: model:ir.model.fields,help:so_release_strategy.field_so_release_strategy__website_message_ids
+msgid "Website communication history"
 msgstr ""
 
 #. module: so_release_strategy

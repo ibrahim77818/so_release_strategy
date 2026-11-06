@@ -38,6 +38,11 @@ class TestSoReleaseStrategy(SoReleaseCommon):
             self.team_a.so_release_strategy_id = False
         with self.assertRaises(ValidationError):
             self.strategy_b.active = False
+        other_company = self.env['res.company'].create({'name': 'Release Other Co'})
+        foreign_strategy = self.env['so.release.strategy'].create({
+            'name': 'Other Company Strategy', 'company_id': other_company.id})
+        with self.assertRaises(ValidationError):
+            self.team_b.so_release_strategy_id = foreign_strategy
         self.assertEqual(self.strategy.team_count, len(self.strategy.team_ids))
         self.assertIn(self.team_a, self.strategy.team_ids)
 
@@ -536,16 +541,20 @@ class TestSoReleaseStrategy(SoReleaseCommon):
                                     name='Portal Customer')
         so.sudo().write({'signature': SIGNATURE, 'signed_by': 'Customer',
                          'signed_on': fields.Datetime.now()})
-        comments_before = so.message_ids.filtered(lambda m: m.message_type == 'comment')
-        so_portal = so.with_user(portal_user).sudo()
-        so_portal.action_confirm()
-        so_portal._send_order_confirmation_mail()
+        mt_comment = self.env.ref('mail.mt_comment')
+        customer_mails = lambda: so.message_ids.filtered(lambda m: m.subtype_id == mt_comment)
+        comments_before = customer_mails()
+        # same call as the v17 portal signature / payment flows
+        so.with_user(portal_user).sudo().with_context(send_email=True).action_confirm()
         self.assertEqual(so.state, 'sent', 'held for approval, not confirmed')
         self.assertEqual(so.release_state, 'pending')
-        comments_after = so.message_ids.filtered(lambda m: m.message_type == 'comment')
+        comments_after = customer_mails()
         self.assertEqual(comments_before, comments_after, 'no confirmation mail while held')
         self._approve_all(so)
         self.assertEqual(so.state, 'sale')
+        comments_final = customer_mails()
+        self.assertGreater(len(comments_final), len(comments_after),
+                           'confirmation mail sent once released')
 
     # ------------------------------------------------------------------
     # UI
@@ -606,7 +615,7 @@ class TestSoReleaseStrategy(SoReleaseCommon):
         self._wizard(so, self.fin2, 'approve')
         self.assertEqual(len(so.picking_ids), 1)
         picking = so.picking_ids
-        picking.move_ids.quantity_done = 1
+        picking.move_ids.write({'quantity': 1, 'picked': True})
         picking.button_validate()
         self.assertEqual(so.order_line.qty_delivered, 1)
         self.assertEqual(so.release_state, 'approved')

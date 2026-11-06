@@ -245,7 +245,7 @@ class SaleOrder(models.Model):
         """Confirmed order waiting for (or refused) a new release approval:
         invoicing and new deliveries wait until it is approved again."""
         self.ensure_one()
-        return bool(self.state in ('sale', 'done') and self._so_release_is_required()
+        return bool(self.state == 'sale' and self._so_release_is_required()
                     and self.release_state in ('pending', 'rejected'))
 
     def _so_release_check_invoicing(self):
@@ -382,7 +382,7 @@ class SaleOrder(models.Model):
         of its (possibly new) sales team."""
         self.ensure_one()
         _strategy, _amount, rules = self._so_release_rules()
-        confirmed = self.state in ('sale', 'done')
+        confirmed = self.state == 'sale'
         policy = self.release_strategy_id.lock_confirmed_policy
         if confirmed and policy == 'block' and (self.release_state != 'not_required' or rules):
             raise UserError(_(
@@ -444,7 +444,7 @@ class SaleOrder(models.Model):
             return True
         res = super(SaleOrder, to_confirm.with_context(**{SKIP_CHECK_CTX: True})).action_confirm()
         released = to_confirm.filtered(
-            lambda o: o._so_release_is_required() and o.state in ('sale', 'done'))
+            lambda o: o._so_release_is_required() and o.state == 'sale')
         (released & to_check)._so_release_mark_not_required()
         (released - to_check)._so_release_store_snapshot()
         released._so_release_close_salesperson_activity()
@@ -452,8 +452,9 @@ class SaleOrder(models.Model):
 
     def _send_order_confirmation_mail(self):
         # orders held for release approval are not confirmed: no mail yet
+        # (v17 calls this from action_confirm() when send_email is set)
         held = self.filtered(
-            lambda o: o._so_release_is_required() and o.state not in ('sale', 'done'))
+            lambda o: o._so_release_is_required() and o.state != 'sale')
         return super(SaleOrder, self - held)._send_order_confirmation_mail()
 
     def _create_invoices(self, grouped=False, final=False, date=None):
@@ -570,17 +571,18 @@ class SaleOrder(models.Model):
                 'release_approval_date': fields.Datetime.now(),
             })
             strategy = order.release_strategy_id
-            if order.state in ('sale', 'done'):
+            if order.state == 'sale':
                 order._so_release_store_snapshot()
                 order.message_post(body=_('Release strategy approved again.'))
                 order._so_release_notify_salesperson(_('The order was approved again.'))
                 order._so_release_after_release()
                 continue
             if strategy.post_approval_action == 'auto_confirm':
-                order.action_confirm()
+                # same as the portal / payment flows: the customer already
+                # accepted online, so action_confirm() sends the mail
+                order.with_context(
+                    send_email=order._so_release_customer_accepted()).action_confirm()
                 order.message_post(body=_('Order released and confirmed automatically.'))
-                if order._so_release_customer_accepted():
-                    order._send_order_confirmation_mail()
             else:
                 order.message_post(body=_(
                     'Order released. Waiting for the salesperson to confirm it.'))
@@ -606,7 +608,7 @@ class SaleOrder(models.Model):
             notified = self.env['res.users']
             for line in order.release_line_ids:
                 notified |= line._get_approver_users()
-            was_confirmed = order.state in ('sale', 'done')
+            was_confirmed = order.state == 'sale'
             was_held = was_confirmed and order.release_state in ('pending', 'rejected')
             sudo_order._so_release_clear()
             sudo_order.release_reset_count += 1
@@ -648,7 +650,7 @@ class SaleOrder(models.Model):
             ('company_id', 'in', companies.ids), ('release_state', '=', 'pending')])
         # confirmed orders held (pending or rejected re-approval) are released too
         confirmed = self.sudo().search([
-            ('company_id', 'in', companies.ids), ('state', 'in', ('sale', 'done')),
+            ('company_id', 'in', companies.ids), ('state', '=', 'sale'),
             ('release_state', 'in', ('pending', 'rejected'))])
         for order in orders.with_context(**{SKIP_CHECK_CTX: True, RELEASE_CTX: True}):
             order.release_line_ids._cancel()

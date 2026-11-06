@@ -76,11 +76,12 @@ class SoReleaseStrategy(models.Model):
             strategy.lockable_field_ids = lockable
 
     def _compute_counts(self):
-        order_data = self.env['sale.order'].read_group(
-            [('release_strategy_id', 'in', self.ids)],
-            ['release_strategy_id'], ['release_strategy_id'])
-        orders = {d['release_strategy_id'][0]: d['release_strategy_id_count']
-                  for d in order_data}
+        orders = {
+            strategy.id: count
+            for strategy, count in self.env['sale.order']._read_group(
+                [('release_strategy_id', 'in', self.ids)],
+                groupby=['release_strategy_id'], aggregates=['__count'])
+        }
         for strategy in self:
             strategy.rule_count = len(strategy.rule_ids)
             strategy.team_count = len(strategy.team_ids)

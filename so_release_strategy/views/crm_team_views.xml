@@ -9,7 +9,7 @@
                 <field name="so_release_required" invisible="1"/>
                 <field name="so_release_allowed_strategy_ids" invisible="1"/>
                 <field name="so_release_strategy_id" options="{'no_create': True}"
-                       attrs="{'required': [('so_release_required', '=', True)]}"/>
+                       required="so_release_required"/>
             </xpath>
         </field>
     </record>

@@ -10,4 +10,4 @@ class PaymentTransaction(models.Model):
         confirmed: keep them out of the returned "confirmed" orders so that no
         confirmation mail is sent for them yet."""
         orders = super()._check_amount_and_confirm_order()
-        return orders.filtered(lambda o: o.state in ('sale', 'done'))
+        return orders.filtered(lambda o: o.state == 'sale')

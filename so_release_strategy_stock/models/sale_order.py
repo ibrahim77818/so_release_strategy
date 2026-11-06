@@ -21,6 +21,6 @@ class SaleOrder(models.Model):
         res = super()._so_release_after_release()
         # create the deliveries held while the order was waiting; sale_stock
         # only procures the quantity not yet covered by stock moves
-        self.filtered(lambda o: o.state in ('sale', 'done')).order_line.with_context(
+        self.filtered(lambda o: o.state == 'sale').order_line.with_context(
             **{BUCKET: None})._action_launch_stock_rule()
         return res

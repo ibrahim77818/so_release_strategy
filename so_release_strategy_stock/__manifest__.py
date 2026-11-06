@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Sales Order Release Strategy - Inventory',
-    'version': '16.0.1.0.0',
+    'version': '17.0.1.0.0',
     'category': 'Sales/Sales',
     'summary': 'Holds new deliveries of confirmed sales orders while they wait '
                'for a new release approval.',
