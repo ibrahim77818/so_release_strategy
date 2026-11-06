@@ -101,7 +101,7 @@
                         </group>
                     </group>
                     <field name="release_line_ids" readonly="1">
-                        <tree decoration-muted="state in ('waiting', 'cancelled')"
+                        <list decoration-muted="state in ('waiting', 'cancelled')"
                               decoration-warning="state == 'pending'"
                               decoration-success="state in ('approved', 'bypassed')"
                               decoration-danger="state == 'rejected'">
@@ -121,14 +121,14 @@
                             <field name="approved_by_id" widget="many2one_avatar_user"/>
                             <field name="rejected_by_id" optional="hide" widget="many2one_avatar_user"/>
                             <field name="notes"/>
-                        </tree>
+                        </list>
                     </field>
                 </page>
             </xpath>
         </field>
     </record>
 
-    <!-- Quotation and sales order lists: in Odoo 17 both derive from
+    <!-- Quotation and sales order lists: since Odoo 17 both derive from
          sale.sale_order_tree, so one extension covers them -->
     <record id="sale_order_tree_so_release" model="ir.ui.view">
         <field name="name">sale.order.tree.so.release</field>
@@ -170,7 +170,7 @@
     <record id="action_so_release_my_approvals" model="ir.actions.act_window">
         <field name="name">Release Approvals</field>
         <field name="res_model">sale.order</field>
-        <field name="view_mode">tree,form,kanban,activity</field>
+        <field name="view_mode">list,form,kanban,activity</field>
         <field name="view_id" ref="sale.view_quotation_tree"/>
         <field name="search_view_id" ref="sale.view_sales_order_filter"/>
         <field name="domain">[('release_state', '=', 'pending')]</field>

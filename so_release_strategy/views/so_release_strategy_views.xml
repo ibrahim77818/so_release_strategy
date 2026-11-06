@@ -4,7 +4,7 @@
         <field name="name">so.release.strategy.tree</field>
         <field name="model">so.release.strategy</field>
         <field name="arch" type="xml">
-            <tree string="Release Strategies">
+            <list string="Release Strategies">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="amount_basis" optional="show"/>
@@ -12,7 +12,7 @@
                 <field name="rule_count" string="Rules" optional="show"/>
                 <field name="team_count" string="Sales Teams" optional="show"/>
                 <field name="company_id" groups="base.group_multi_company" optional="show"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -53,7 +53,7 @@
                     <notebook>
                         <page string="Approval Rules" name="rules">
                             <field name="rule_ids">
-                                <tree editable="bottom">
+                                <list editable="bottom">
                                     <field name="sequence" string="Stage"/>
                                     <field name="role"/>
                                     <field name="approver_type"/>
@@ -62,7 +62,7 @@
                                     <field name="min_amount"/>
                                     <field name="max_amount"/>
                                     <field name="currency_id" column_invisible="True"/>
-                                </tree>
+                                </list>
                             </field>
                             <div class="text-muted o_so_release_hint">
                                 Rules with the same stage are approved in parallel; the next stage starts when the current one is complete.
@@ -80,11 +80,11 @@
                         </page>
                         <page string="Sales Teams" name="teams">
                             <field name="team_ids" readonly="1">
-                                <tree>
+                                <list>
                                     <field name="name"/>
                                     <field name="user_id" widget="many2one_avatar_user"/>
                                     <field name="company_id" groups="base.group_multi_company"/>
-                                </tree>
+                                </list>
                             </field>
                             <div class="text-muted o_so_release_hint">
                                 Assign this strategy as the default release strategy of a sales team from the team form.
@@ -95,10 +95,7 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="message_ids"/>
-                </div>
+                <chatter/>
             </form>
         </field>
     </record>
@@ -122,7 +119,7 @@
     <record id="action_so_release_strategy" model="ir.actions.act_window">
         <field name="name">Release Strategies</field>
         <field name="res_model">so.release.strategy</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Create a sales release strategy</p>
             <p>Define who must approve sales orders, in which order and above which amounts, then assign the strategy to your sales teams.</p>

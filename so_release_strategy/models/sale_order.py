@@ -430,6 +430,11 @@ class SaleOrder(models.Model):
         for order in to_check:
             order._so_release_check_team_salesperson()
             if order._so_release_rules()[2]:
+                # v18: same checks as a confirmation (e.g. lines without
+                # product) before approvers are asked
+                error_msg = order._confirmation_error_message()
+                if error_msg:
+                    raise UserError(error_msg)
                 to_submit |= order
         if to_submit:
             to_submit.order_line._validate_analytic_distribution()
@@ -699,6 +704,10 @@ class SaleOrder(models.Model):
                 raise UserError(_(
                     'No approval rule of the sales team strategy applies to the '
                     'amount of %s: it can be confirmed directly.', order.name))
+            if not resubmit_confirmed:
+                error_msg = order._confirmation_error_message()
+                if error_msg:
+                    raise UserError(error_msg)
             order.order_line._validate_analytic_distribution()
             to_submit |= order
         to_submit._so_release_submit()

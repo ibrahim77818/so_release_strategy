@@ -600,7 +600,7 @@ class TestSoReleaseStrategy(SoReleaseCommon):
         if 'picking_ids' not in self.env['sale.order']._fields:
             self.skipTest('sale_stock is not installed')
         storable = self.env['product.product'].create({
-            'name': 'Release Storable', 'type': 'product', 'taxes_id': False,
+            'name': 'Release Storable', 'type': 'consu', 'is_storable': True, 'taxes_id': False,
             'list_price': 1.0})
         self.env['stock.quant']._update_available_quantity(
             storable, self.env['stock.warehouse'].search(

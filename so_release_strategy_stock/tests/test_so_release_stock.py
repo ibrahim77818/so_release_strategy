@@ -12,7 +12,7 @@ class TestSoReleaseStock(SoReleaseCommon):
     def setUpClass(cls):
         super().setUpClass()
         cls.storable = cls.env['product.product'].create({
-            'name': 'Release Storable', 'type': 'product', 'list_price': 100.0,
+            'name': 'Release Storable', 'type': 'consu', 'is_storable': True, 'list_price': 100.0,
             'taxes_id': False, 'invoice_policy': 'order'})
         warehouse = cls.env['stock.warehouse'].search(
             [('company_id', '=', cls.company.id)], limit=1)

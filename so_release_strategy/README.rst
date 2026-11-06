@@ -2,7 +2,7 @@
 Sales Order Release Strategy
 ============================
 
-Multi-level, amount-based approval ("release strategy") for Odoo 17 sales
+Multi-level, amount-based approval ("release strategy") for Odoo 18 sales
 orders, driven by the sales team. Works on Community and Enterprise, depends
 only on ``sale`` and ``mail``. Sales twin of ``po_release_strategy``.
 
