@@ -2,7 +2,7 @@
 from odoo import Command
 from odoo.tests import tagged
 
-from odoo.addons.so_release_strategy.tests.common import SoReleaseCommon
+from .common import SoReleaseCommon
 
 
 @tagged('post_install', '-at_install')
