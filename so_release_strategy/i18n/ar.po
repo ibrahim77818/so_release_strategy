@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0\n"
+"Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-06 15:00+0000\n"
-"PO-Revision-Date: 2026-11-06 15:00+0000\n"
+"POT-Creation-Date: 2026-11-06 16:00+0000\n"
+"PO-Revision-Date: 2026-11-06 16:00+0000\n"
 "Last-Translator: Ibrahim Yahia\n"
 "Language-Team: Arabic\n"
 "Language: ar\n"
@@ -402,6 +402,14 @@ msgid "Description"
 msgstr "الوصف"
 
 #. module: so_release_strategy
+#: model:ir.model.fields,field_description:so_release_strategy.field_crm_team__display_name
+#: model:ir.model.fields,field_description:so_release_strategy.field_mail_activity__display_name
+#: model:ir.model.fields,field_description:so_release_strategy.field_payment_transaction__display_name
+#: model:ir.model.fields,field_description:so_release_strategy.field_res_company__display_name
+#: model:ir.model.fields,field_description:so_release_strategy.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:so_release_strategy.field_sale_advance_payment_inv__display_name
+#: model:ir.model.fields,field_description:so_release_strategy.field_sale_order__display_name
+#: model:ir.model.fields,field_description:so_release_strategy.field_sale_order_line__display_name
 #: model:ir.model.fields,field_description:so_release_strategy.field_sale_order_release_line__display_name
 #: model:ir.model.fields,field_description:so_release_strategy.field_so_release_action_wizard__display_name
 #: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy__display_name
@@ -441,16 +449,19 @@ msgid "Function of the approver, e.g. Sales Director."
 msgstr "وظيفة المعتمِد، مثل: مدير المبيعات."
 
 #. module: so_release_strategy
-#: model_terms:ir.ui.view,arch_db:so_release_strategy.so_release_strategy_view_search
-msgid "Group By"
-msgstr "تجميع حسب"
-
-#. module: so_release_strategy
 #: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy__has_message
 msgid "Has Message"
 msgstr "يحتوي على رسالة"
 
 #. module: so_release_strategy
+#: model:ir.model.fields,field_description:so_release_strategy.field_crm_team__id
+#: model:ir.model.fields,field_description:so_release_strategy.field_mail_activity__id
+#: model:ir.model.fields,field_description:so_release_strategy.field_payment_transaction__id
+#: model:ir.model.fields,field_description:so_release_strategy.field_res_company__id
+#: model:ir.model.fields,field_description:so_release_strategy.field_res_config_settings__id
+#: model:ir.model.fields,field_description:so_release_strategy.field_sale_advance_payment_inv__id
+#: model:ir.model.fields,field_description:so_release_strategy.field_sale_order__id
+#: model:ir.model.fields,field_description:so_release_strategy.field_sale_order_line__id
 #: model:ir.model.fields,field_description:so_release_strategy.field_sale_order_release_line__id
 #: model:ir.model.fields,field_description:so_release_strategy.field_so_release_action_wizard__id
 #: model:ir.model.fields,field_description:so_release_strategy.field_so_release_strategy__id
@@ -1106,7 +1117,7 @@ msgid "Sales Release Strategies"
 msgstr "استراتيجيات اعتماد المبيعات"
 
 #. module: so_release_strategy
-#: model:ir.module.category,name:so_release_strategy.module_category_so_release
+#: model:res.groups.privilege,name:so_release_strategy.res_groups_privilege_so_release
 msgid "Sales Release Strategy"
 msgstr "استراتيجية اعتماد المبيعات"
 

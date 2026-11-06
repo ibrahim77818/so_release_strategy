@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+from contextlib import contextmanager
 
 from markupsafe import Markup, escape
 
@@ -12,6 +13,10 @@ from .mail_activity import RELEASE_CTX
 # Context keys
 SKIP_CHECK_CTX = 'so_release_skip_lock_check'
 DEFER_CHECK_CTX = 'so_release_defer_lock_check'
+
+# Transaction-scoped state kept in env.cr.cache (v19: env.transaction uses __slots__)
+WRITE_DEPTH_KEY = 'so_release_write_depth'
+CHECKING_KEY = 'so_release_checking'
 
 RELEASE_STATES = [
     ('draft', 'Not Submitted'),
@@ -34,6 +39,8 @@ NON_LOCKABLE_FIELDS = {
     'show_update_pricelist', 'show_update_fpos', 'recompute_delivery_price',
     'tax_totals', 'tax_country_id', 'country_code', 'amount_to_invoice',
     'amount_invoiced', 'amount_undiscounted', 'locked',
+    # v19: technical, written by Odoo when an email is queued
+    'pending_email_template_id',
 }
 # Computed totals that are still meaningful to freeze.
 LOCKABLE_COMPUTED_FIELDS = {'amount_untaxed', 'amount_tax', 'amount_total'}
@@ -310,8 +317,8 @@ class SaleOrder(models.Model):
         if field_name == 'order_line':
             return [
                 [line.id, line.display_type or '', line.product_id.id, line.name or '',
-                 norm(line.product_uom_qty), line.product_uom.id, norm(line.price_unit),
-                 norm(line.discount), sorted(line.tax_id.ids)]
+                 norm(line.product_uom_qty), line.product_uom_id.id, norm(line.price_unit),
+                 norm(line.discount), sorted(line.tax_ids.ids)]  # v19: product_uom_id, tax_ids
                 for line in self._so_release_snapshot_lines().sorted('id')
             ]
         if field_name in LOCKABLE_COMPUTED_FIELDS:
@@ -355,22 +362,56 @@ class SaleOrder(models.Model):
     def _so_release_changed_fields(self):
         """Names of watched fields whose value differs from the snapshot."""
         self.ensure_one()
-        raw = self.sudo().release_snapshot
-        if not raw:
+        if not self.sudo().release_snapshot:
             return []
-        stored = json.loads(raw)
+        # Build the current values first: reading the lines can trigger v19
+        # recomputations that write back to them (e.g. _reset_price_unit) and
+        # re-enter this check, which may store a fresh snapshot. Reading the
+        # stored snapshot afterwards avoids comparing against a stale one.
         current = json.loads(json.dumps(self._so_release_build_snapshot(),
                                         sort_keys=True, default=str))
+        raw = self.sudo().release_snapshot
+        if not raw or self.release_state not in ('pending', 'approved', 'not_required'):
+            return []
+        stored = json.loads(raw)
         return [name for name in stored if stored.get(name) != current.get(name)]
+
+    @contextmanager
+    def _so_release_write_scope(self):
+        """Track nested writes on orders/lines within the transaction.
+
+        Yields True for the outermost write only, so the locked-field check runs
+        once, after the ORM has finished the write and its side effects (v19
+        recomputations such as _reset_price_unit write back to the lines)."""
+        cache = self.env.cr.cache
+        depth = cache.get(WRITE_DEPTH_KEY, 0)
+        cache[WRITE_DEPTH_KEY] = depth + 1
+        try:
+            yield depth == 0
+        finally:
+            cache[WRITE_DEPTH_KEY] = depth
 
     def _so_release_check_locked_changes(self):
         if self.env.context.get(SKIP_CHECK_CTX) or self.env.context.get(DEFER_CHECK_CTX):
+            return
+        cache = self.env.cr.cache
+        if cache.get(CHECKING_KEY):
+            # re-entered from a recomputation triggered by the running check
             return
         orders = self.exists().filtered(
             lambda o: o.release_state in ('pending', 'approved', 'not_required')
             and o.state != 'cancel' and o._so_release_is_required()
             and o.sudo().release_snapshot)
-        for order in orders:
+        if not orders:
+            return
+        cache[CHECKING_KEY] = True
+        try:
+            orders._so_release_apply_locked_changes()
+        finally:
+            cache[CHECKING_KEY] = False
+
+    def _so_release_apply_locked_changes(self):
+        for order in self:
             changed = order._so_release_changed_fields()
             if not changed:
                 continue
@@ -401,8 +442,10 @@ class SaleOrder(models.Model):
     def write(self, vals):
         if self.env.context.get(SKIP_CHECK_CTX):
             return super().write(vals)
-        res = super(SaleOrder, self.with_context(**{DEFER_CHECK_CTX: True})).write(vals)
-        self._so_release_check_locked_changes()
+        with self._so_release_write_scope() as outermost:
+            res = super(SaleOrder, self.with_context(**{DEFER_CHECK_CTX: True})).write(vals)
+        if outermost:
+            self._so_release_check_locked_changes()
         return res
 
     @api.constrains('team_id', 'user_id', 'company_id')
@@ -810,17 +853,23 @@ class SaleOrderLine(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        lines = super().create(vals_list)
-        self._so_release_check_orders(lines.order_id)
+        with self.env['sale.order']._so_release_write_scope() as outermost:
+            lines = super().create(vals_list)
+        if outermost:
+            self._so_release_check_orders(lines.order_id)
         return lines
 
     def write(self, vals):
-        res = super().write(vals)
-        self._so_release_check_orders(self.order_id)
+        with self.env['sale.order']._so_release_write_scope() as outermost:
+            res = super().write(vals)
+        if outermost:
+            self._so_release_check_orders(self.order_id)
         return res
 
     def unlink(self):
         orders = self.order_id
-        res = super().unlink()
-        self._so_release_check_orders(orders)
+        with self.env['sale.order']._so_release_write_scope() as outermost:
+            res = super().unlink()
+        if outermost:
+            self._so_release_check_orders(orders)
         return res

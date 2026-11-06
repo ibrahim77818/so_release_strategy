@@ -22,7 +22,7 @@ class TestSoReleaseStock(SoReleaseCommon):
     def _confirmed_so(self, qty=5):
         so = self._create_so(order_line=[Command.create({
             'product_id': self.storable.id, 'product_uom_qty': qty,
-            'price_unit': 100.0, 'tax_id': False})])
+            'price_unit': 100.0, 'tax_ids': False})])
         so.action_confirm()
         self.assertEqual(so.state, 'sale')
         self.assertEqual(so.release_state, 'not_required')
@@ -46,7 +46,7 @@ class TestSoReleaseStock(SoReleaseCommon):
         so = self._confirmed_so()
         so.write({'order_line': [Command.create({
             'product_id': self.storable.id, 'product_uom_qty': 30,
-            'price_unit': 100.0, 'tax_id': False})]})
+            'price_unit': 100.0, 'tax_ids': False})]})
         self.assertEqual(so.release_state, 'pending')
         self.assertEqual(self._demand(so), 5)
         self._wizard(so, self.supervisor, 'bypass', 'Urgent')

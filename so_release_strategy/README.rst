@@ -2,7 +2,7 @@
 Sales Order Release Strategy
 ============================
 
-Multi-level, amount-based approval ("release strategy") for Odoo 18 sales
+Multi-level, amount-based approval ("release strategy") for Odoo 19 sales
 orders, driven by the sales team. Works on Community and Enterprise, depends
 only on ``sale`` and ``mail``. Sales twin of ``po_release_strategy``.
 
@@ -30,8 +30,8 @@ Configuration
    **Sales Release Strategies** (company specific, off by default). Enabling
    is refused while a sales team of the company (or a team without company)
    has no active strategy of that company.
-4. Give the *Release Supervisor* right (Settings > Users > Sales Release
-   Strategy) to users allowed to bypass approvals.
+4. Give the *Release Supervisor* right (Settings > Users, Sales Release
+   Strategy privilege) to users allowed to bypass approvals.
 
 Approvers must be internal users with Sales rights. Approvers limited to
 their own documents can still open the orders they have to approve (read

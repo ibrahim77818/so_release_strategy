@@ -36,7 +36,7 @@ class SoReleaseCommon(TransactionCase):
             groups='base.group_user,sales_team.group_sale_manager')
         cls.finance_group = cls.env['res.groups'].create({
             'name': 'Sales Release Finance Approvers',
-            'users': [Command.link(cls.fin1.id), Command.link(cls.fin2.id)],
+            'user_ids': [Command.link(cls.fin1.id), Command.link(cls.fin2.id)],
         })
 
         cls.partner = cls.env['res.partner'].create({'name': 'Release Customer'})
@@ -114,7 +114,7 @@ class SoReleaseCommon(TransactionCase):
                 'product_id': self.product.id,
                 'product_uom_qty': qty,
                 'price_unit': price,
-                'tax_id': False,
+                'tax_ids': False,
             })],
         }
         if pricelist:

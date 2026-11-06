@@ -109,7 +109,7 @@
                 <field name="rule_ids" string="Approver" filter_domain="['|', ('rule_ids.user_id', 'ilike', self), ('rule_ids.group_id', 'ilike', self)]"/>
                 <field name="team_ids" string="Sales Team"/>
                 <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter name="group_action" string="After Final Approval" context="{'group_by': 'post_approval_action'}"/>
                 </group>
             </search>

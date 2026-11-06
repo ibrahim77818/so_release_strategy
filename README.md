@@ -1,4 +1,4 @@
-# Sales Order Release Strategy (Odoo 18.0)
+# Sales Order Release Strategy (Odoo 19.0)
 
 Team-driven, multi-level approval ("release strategy") for Odoo sales orders.
 Community and Enterprise. English and Arabic (`ar_001`), right-to-left ready.
@@ -16,7 +16,7 @@ Each branch holds the code for one Odoo version:
 | `18.0` | 18.0 | 18.0.1.0.0 | 18.0.1.0.0 |
 | `19.0` | 19.0 | 19.0.1.0.0 | 19.0.1.0.0 |
 
-This branch: **18.0** (`so_release_strategy` 18.0.1.0.0, `so_release_strategy_stock` 18.0.1.0.0).
+This branch: **19.0** (`so_release_strategy` 19.0.1.0.0, `so_release_strategy_stock` 19.0.1.0.0).
 
 ## Modules
 
@@ -62,5 +62,5 @@ odoo-bin -d <db> -i so_release_strategy,so_release_strategy_stock \
 
 ## Other versions
 
-`16.0`, `17.0`, `19.0`
+`16.0`, `17.0`, `18.0`
 

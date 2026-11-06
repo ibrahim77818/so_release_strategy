@@ -11,7 +11,7 @@ BUCKET = 'so_release_procurement_bucket'
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    def _action_launch_stock_rule(self, previous_product_uom_qty=False):
+    def _action_launch_stock_rule(self, *, previous_product_uom_qty=False):  # keyword-only since v19
         bucket = self.env.context.get(BUCKET)
         if bucket is not None:
             bucket.append((self.ids, previous_product_uom_qty))
@@ -20,14 +20,15 @@ class SaleOrderLine(models.Model):
         lines = self - held
         if not lines:
             return True
-        return super(SaleOrderLine, lines)._action_launch_stock_rule(previous_product_uom_qty)
+        return super(SaleOrderLine, lines)._action_launch_stock_rule(
+            previous_product_uom_qty=previous_product_uom_qty)
 
     def _so_release_flush_procurements(self, bucket):
         Line = self.with_context(**{BUCKET: None})
         for ids, previous in bucket:
             # held orders are filtered out again; their deliveries are created
             # once the order is released (sale.order._so_release_after_release)
-            Line.browse(ids).exists()._action_launch_stock_rule(previous)
+            Line.browse(ids).exists()._action_launch_stock_rule(previous_product_uom_qty=previous)
 
     @api.model_create_multi
     def create(self, vals_list):

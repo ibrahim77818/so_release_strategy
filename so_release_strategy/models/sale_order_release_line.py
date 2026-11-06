@@ -67,7 +67,9 @@ class SaleOrderReleaseLine(models.Model):
         if self.approver_type == 'user':
             users = self.user_id
         else:
-            users = self.group_id.sudo().users
+            # v19: user_ids only holds explicit members; all_user_ids adds users
+            # who get the group through an implied group
+            users = self.group_id.sudo().all_user_ids
         company = self.order_id.company_id
         return users.filtered(
             lambda u: u.active and not u.share and company in u.company_ids)

@@ -222,11 +222,28 @@ class TestSoReleaseStrategy(SoReleaseCommon):
 
     def test_22_group_member_without_access_skipped(self):
         no_access = new_test_user(self.env, 'srs_noaccess', groups='base.group_user', name='No Access')
-        self.finance_group.users = [Command.link(no_access.id)]
+        self.finance_group.user_ids = [Command.link(no_access.id)]
         so = self._create_so(price=20000)
         so.action_confirm()
         self._wizard(so, self.manager, 'approve')
         self.assertNotIn(no_access, self._release_activities(so).user_id)
+
+    def test_23_group_member_through_implied_group(self):
+        """v19: members who get the approver group via an implied group are approvers too."""
+        indirect = new_test_user(self.env, 'srs_indirect', name='Indirect Finance',
+                                 groups='base.group_user,sales_team.group_sale_salesman')
+        wrapper = self.env['res.groups'].create({
+            'name': 'Finance Department', 'implied_ids': [Command.link(self.finance_group.id)],
+            'user_ids': [Command.link(indirect.id)]})
+        self.assertTrue(wrapper)
+        self.assertIn(indirect, self.finance_group.all_user_ids)
+        so = self._create_so(price=20000)
+        so.action_confirm()
+        self._wizard(so, self.manager, 'approve')
+        self.assertIn(indirect, self._release_activities(so).user_id)
+        so.with_user(indirect).read(['name'])  # record rule follows implied membership
+        self._wizard(so, indirect, 'approve', 'Approved through the department group')
+        self.assertEqual(so.state, 'sale')
 
     # ------------------------------------------------------------------
     # currency normalization
@@ -262,7 +279,7 @@ class TestSoReleaseStrategy(SoReleaseCommon):
         tax = self.env['account.tax'].create({
             'name': 'SRS 100%', 'amount': 100.0, 'type_tax_use': 'sale'})
         so = self._create_so(price=6000)
-        so.order_line.tax_id = tax
+        so.order_line.tax_ids = tax
         self.assertEqual(so.amount_total, 12000.0)
         so.action_confirm()
         self.assertEqual(len(so.release_line_ids), 2)
@@ -405,8 +422,35 @@ class TestSoReleaseStrategy(SoReleaseCommon):
         self.assertEqual(so.release_reset_count, 1)
         self.assertEqual(so.release_state, 'pending')
         so.with_user(self.salesperson).write({'order_line': [Command.create({
-            'product_id': self.product.id, 'product_uom_qty': 1, 'price_unit': 1, 'tax_id': False})]})
+            'product_id': self.product.id, 'product_uom_qty': 1, 'price_unit': 1, 'tax_ids': False})]})
         self.assertEqual(so.release_reset_count, 2)
+
+    def test_61b_confirmed_quantity_change_resets_once(self):
+        """One change must give exactly one reset, even when v19 recomputes and
+        rewrites the line while the change is being checked."""
+        self.strategy.locked_field_ids = [Command.link(self.f_amount_total.id),
+                                          Command.link(self.f_order_line.id)]
+        so = self._create_so(price=100, qty=60)
+        so.action_confirm()
+        self._wizard(so, self.manager, 'approve')
+        self.assertEqual(so.state, 'sale')
+        if so.locked:
+            so.action_unlock()
+        messages_before = so.message_ids
+        so.order_line.with_user(self.salesperson).write({'product_uom_qty': 95})
+        self.assertEqual(so.release_reset_count, 1)
+        reset_msgs = (so.message_ids - messages_before).filtered(
+            lambda m: 'locked fields were modified' in (m.body or ''))
+        self.assertEqual(len(reset_msgs), 1)
+        self.assertEqual(so.release_state, 'pending')
+
+    def test_61c_lockable_fields_v19(self):
+        names = self.env['sale.order']._so_release_lockable_field_names()
+        for name in ('partner_id', 'order_line', 'amount_total', 'payment_term_id', 'pricelist_id'):
+            self.assertIn(name, names)
+        for name in ('state', 'name', 'locked', 'pending_email_template_id', 'release_state',
+                     'team_id', 'company_id', 'invoice_status'):
+            self.assertNotIn(name, names)
 
     def test_62_unlocked_field_does_not_reset(self):
         so = self._create_so(price=2000)
@@ -470,7 +514,7 @@ class TestSoReleaseStrategy(SoReleaseCommon):
         self.assertEqual(so.state, 'sale')
         self.env['sale.order.line'].create({
             'order_id': so.id, 'name': 'Down payment', 'product_id': self.product.id,
-            'product_uom_qty': 0.0, 'price_unit': 500.0, 'is_downpayment': True, 'tax_id': False,
+            'product_uom_qty': 0.0, 'price_unit': 500.0, 'is_downpayment': True, 'tax_ids': False,
         })
         self.assertEqual(so.release_reset_count, 0)
         self.assertEqual(so.release_state, 'approved')
