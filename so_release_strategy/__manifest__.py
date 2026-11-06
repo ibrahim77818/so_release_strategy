@@ -35,6 +35,7 @@ Sales Order Release Strategy
     'author': 'Ibrahim Yahia',
     'website': 'https://www.linkedin.com/in/ibrahim-yahia',
     'license': 'LGPL-3',
+    'images': ['static/description/banner.png'],
     'depends': ['sale_stock', 'mail'],
     'data': [
         'security/so_release_security.xml',
