@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models
 
-from .sale_order_line import BUCKET
+from .sale_order_line_stock import BUCKET
 
 
 class SaleOrder(models.Model):

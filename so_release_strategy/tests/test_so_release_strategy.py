@@ -585,11 +585,9 @@ class TestSoReleaseStrategy(SoReleaseCommon):
         self.assertIn(so, found)
 
     # ------------------------------------------------------------------
-    # integration with sale_stock (skipped when not installed)
+    # integration with sale_stock
     # ------------------------------------------------------------------
     def test_90_delivery_created_only_after_release(self):
-        if 'picking_ids' not in self.env['sale.order']._fields:
-            self.skipTest('sale_stock is not installed')
         storable = self.env['product.product'].create({
             'name': 'Release Storable', 'type': 'product', 'taxes_id': False,
             'list_price': 1.0})

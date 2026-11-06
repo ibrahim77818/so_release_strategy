@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Sales Order Release Strategy',
-    'version': '16.0.1.1.0',
+    'version': '16.0.1.2.0',
     'category': 'Sales/Sales',
     'summary': 'Multi-level sales order approvals driven by the sales team: '
                'amount-based release strategies, user/group approvers, '
@@ -28,12 +28,14 @@ Sales Order Release Strategy
   the order, clears approvals and re-notifies every approver.
 * Online signature and payment flows hold orders that need approval instead of
   confirming them.
+* While a confirmed order waits for a new approval it cannot be invoiced and
+  the deliveries for added quantities are created only once it is approved.
 * Arabic (ar_001) translation, RTL ready.
 """,
     'author': 'Ibrahim Yahia',
     'website': 'https://www.linkedin.com/in/ibrahim-yahia',
     'license': 'LGPL-3',
-    'depends': ['sale', 'mail'],
+    'depends': ['sale_stock', 'mail'],
     'data': [
         'security/so_release_security.xml',
         'security/ir.model.access.csv',

@@ -4,7 +4,7 @@ Sales Order Release Strategy
 
 Multi-level, amount-based approval ("release strategy") for Odoo 16 sales
 orders, driven by the sales team. Works on Community and Enterprise, depends
-only on ``sale`` and ``mail``. Sales twin of ``po_release_strategy``.
+on ``sale_stock`` (Sales and Inventory) and ``mail``. Sales twin of ``po_release_strategy``.
 
 Configuration
 =============
@@ -105,9 +105,8 @@ expenses, delivery costs) are outside the lock.
 
 While a confirmed order waits for a new approval, or the new approval was
 rejected, it cannot be invoiced (down payments included); automated invoicing
-after an online payment skips it. With Inventory, the companion module
-``so_release_strategy_stock`` (installed automatically) creates the deliveries
-for added quantities only once the order is approved again.
+after an online payment skips it. The deliveries for added quantities are
+created only once the order is approved again.
 
 Switching the feature off cancels the approvals still pending (activities
 removed, approval history kept) and creates any held deliveries.
