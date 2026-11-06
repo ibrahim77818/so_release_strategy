@@ -9,21 +9,16 @@ Author: [Ibrahim Yahia](https://www.linkedin.com/in/ibrahim-yahia) · License: L
 
 Each branch holds the code for one Odoo version:
 
-| Branch | Odoo | `so_release_strategy` | `so_release_strategy_stock` |
-|---|---|---|---|
-| `16.0` | 16.0 | 16.0.1.1.0 | 16.0.1.0.0 |
-| `17.0` | 17.0 | 17.0.1.1.0 | 17.0.1.0.0 |
-| `18.0` | 18.0 | 18.0.1.0.0 | 18.0.1.0.0 |
-| `19.0` | 19.0 | 19.0.1.0.0 | 19.0.1.0.0 |
-
-This branch: **17.0** (`so_release_strategy` 17.0.1.1.0, `so_release_strategy_stock` 17.0.1.0.0).
-
-## Modules
-
-| Module | Depends on | Purpose |
+| Branch | Odoo | `so_release_strategy` |
 |---|---|---|
-| `so_release_strategy` | `sale`, `mail` | Release strategies, approvals, locked fields |
-| `so_release_strategy_stock` | `so_release_strategy`, `sale_stock` | Holds new deliveries while a confirmed order waits for re-approval. Installed automatically with Inventory |
+| `16.0` | 16.0 | 16.0.1.2.0 |
+| `17.0` | 17.0 | 17.0.1.2.0 |
+| `18.0` | 18.0 | 18.0.1.1.0 |
+| `19.0` | 19.0 | 19.0.1.1.0 |
+
+This branch: **17.0** (`so_release_strategy` 17.0.1.2.0).
+
+Depends on `sale_stock` (Sales and Inventory) and `mail`.
 
 ## Features
 
@@ -40,27 +35,34 @@ This branch: **17.0** (`so_release_strategy` 17.0.1.1.0, `so_release_strategy_st
 - After final approval: confirm automatically, or notify the salesperson.
 - Locked fields: changing them after submission or confirmation re-evaluates the order and
   notifies every approver again. While a confirmed order waits for re-approval it cannot be
-  invoiced, and new deliveries wait.
+  invoiced, and the deliveries for added quantities wait until it is approved.
 - Online signature and payment are held for approval.
-- Switching the feature off cancels pending approvals and keeps the approval history.
+- Switching the feature off cancels pending approvals, keeps the approval history and creates
+  the held deliveries.
 
 ## Installation
 
-1. Put both module folders in your addons path (on Odoo.sh, push this branch to your repository).
-2. Install **Sales Order Release Strategy**. With Inventory installed, **Sales Order Release
-   Strategy - Inventory** installs automatically; on a database where both are already
-   installed, install it once from Apps.
+1. Put the `so_release_strategy` folder in your addons path (on Odoo.sh, push this branch to
+   your repository).
+2. Install **Sales Order Release Strategy** (Inventory is installed with it if missing).
 3. Create strategies in **Sales › Configuration › Release Strategies**, assign one to each
    sales team, then enable the setting.
+
+### Upgrading from an earlier release
+
+Earlier releases shipped the Inventory part as a separate module,
+`so_release_strategy_stock`. It is now part of `so_release_strategy`:
+
+1. Remove the `so_release_strategy_stock` folder from your addons path.
+2. Upgrade **Sales Order Release Strategy**. The upgrade marks the old module as
+   uninstalled (it held no data) and installs Inventory if it was not installed.
 
 ## Tests
 
 ```
-odoo-bin -d <db> -i so_release_strategy,so_release_strategy_stock \
-    --test-tags /so_release_strategy,/so_release_strategy_stock
+odoo-bin -d <db> -i so_release_strategy --test-tags /so_release_strategy
 ```
 
 ## Other versions
 
 `16.0`, `18.0`, `19.0`
-

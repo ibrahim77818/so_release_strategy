@@ -3,8 +3,10 @@ from odoo import api, models
 
 # During a write/create the release status of the order is only final once
 # every module's override has run (the locked-field check of
-# so_release_strategy may send the order back for approval). Procurements
-# requested meanwhile by sale_stock are collected here and launched at the end.
+# this module may send the order back for approval). Procurements requested
+# meanwhile by sale_stock are collected here and launched at the end.
+# This file is imported after sale_order.py so that these overrides sit on top
+# of the locked-field checks of the same module.
 BUCKET = 'so_release_procurement_bucket'
 
 
