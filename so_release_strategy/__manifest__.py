@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Sales Order Release Strategy',
-    'version': '16.0.1.2.1',
+    'version': '16.0.1.2.0',
     'category': 'Sales/Sales',
     'summary': 'Multi-level sales order approvals driven by the sales team: '
                'amount-based release strategies, user/group approvers, '
