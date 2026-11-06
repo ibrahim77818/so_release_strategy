@@ -6,7 +6,7 @@ SIGNATURE = b'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 
 
 class SoReleaseCommon(TransactionCase):
-    """Shared data: also used by so_release_strategy_stock."""
+    """Shared data of the release strategy tests."""
 
     @classmethod
     def setUpClass(cls):

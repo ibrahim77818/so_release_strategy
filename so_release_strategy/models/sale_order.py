@@ -265,8 +265,8 @@ class SaleOrder(models.Model):
 
     def _so_release_after_release(self):
         """Hook: confirmed orders whose release is complete again (approved,
-        bypassed, no longer needed or feature switched off). Extended by
-        so_release_strategy_stock to create the deliveries held meanwhile."""
+        bypassed, no longer needed or feature switched off). Extended in
+        sale_order_stock.py to create the deliveries held meanwhile."""
         return True
 
     def _so_release_customer_accepted(self):
