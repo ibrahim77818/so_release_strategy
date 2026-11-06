@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_so_release" model="ir.ui.view">
+        <field name="name">sale.order.form.so.release</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Native confirm buttons give way to "Request Approval" when the
+                 amount is within the range of the team's strategy -->
+            <xpath expr="//header/button[@name='action_confirm'][@id='action_confirm']" position="attributes">
+                <attribute name="states"/>
+                <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['sent']), '|', ('release_state', '=', 'pending'), '&amp;', ('release_needed', '=', True), ('release_state', '!=', 'approved')]}</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='action_confirm'][not(@id)]" position="attributes">
+                <attribute name="states"/>
+                <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['draft']), '|', ('release_state', '=', 'pending'), '&amp;', ('release_needed', '=', True), ('release_state', '!=', 'approved')]}</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='action_confirm'][@id='action_confirm']" position="before">
+                <field name="release_required" invisible="1"/>
+                <field name="release_needed" invisible="1"/>
+                <field name="release_state" invisible="1"/>
+                <field name="release_can_approve" invisible="1"/>
+                <field name="release_can_reset" invisible="1"/>
+                <button name="action_release_submit" type="object" string="Request Approval"
+                        class="btn-primary" data-hotkey="v" context="{'validate_analytic': True}"
+                        attrs="{'invisible': ['|', ('release_required', '=', False), '&amp;', '|', '|', ('state', 'not in', ('draft', 'sent')), ('release_state', 'not in', ('draft', 'rejected')), ('release_needed', '=', False), '|', ('state', '!=', 'sale'), ('release_state', '!=', 'rejected')]}"/>
+                <button name="action_release_approve" type="object" string="Approve"
+                        class="btn-primary" data-hotkey="shift+a"
+                        attrs="{'invisible': [('release_can_approve', '=', False)]}"/>
+                <button name="action_release_reject" type="object" string="Reject"
+                        data-hotkey="shift+r"
+                        attrs="{'invisible': [('release_can_approve', '=', False)]}"/>
+                <button name="action_release_bypass" type="object" string="Bypass Approval"
+                        groups="so_release_strategy.group_so_release_supervisor"
+                        attrs="{'invisible': ['|', ('release_required', '=', False), ('release_state', '!=', 'pending')]}"/>
+                <button name="action_release_reset" type="object" string="Reset Release"
+                        attrs="{'invisible': [('release_can_reset', '=', False)]}"/>
+            </xpath>
+
+            <!-- Status banners -->
+            <xpath expr="//sheet/div[@name='button_box']" position="after">
+                <div class="alert alert-info o_so_release_alert" role="alert"
+                     attrs="{'invisible': ['|', '|', '|', ('release_required', '=', False), ('release_needed', '=', False), ('release_state', 'not in', ('draft', 'rejected')), ('state', 'not in', ('draft', 'sent'))]}">
+                    <i class="fa fa-info-circle" role="img" aria-label="Approval required" title="Approval required"/>
+                    <span>The amount of this quotation requires the approval of the sales team release strategy before confirmation.</span>
+                </div>
+                <div class="alert alert-warning o_so_release_alert" role="alert"
+                     attrs="{'invisible': ['|', ('release_required', '=', False), ('release_state', '!=', 'pending')]}">
+                    <i class="fa fa-hourglass-half" role="img" aria-label="Waiting" title="Waiting"/>
+                    <span>Waiting for release approval by:</span>
+                    <field name="release_pending_user_ids" widget="many2many_tags" readonly="1" class="o_so_release_inline"/>
+                </div>
+                <div class="alert alert-success o_so_release_alert" role="alert"
+                     attrs="{'invisible': ['|', '|', ('release_required', '=', False), ('release_state', '!=', 'approved'), ('state', 'not in', ('draft', 'sent'))]}">
+                    <i class="fa fa-check" role="img" aria-label="Released" title="Released"/>
+                    <span>This order is released and ready to be confirmed.</span>
+                </div>
+                <div class="alert alert-danger o_so_release_alert" role="alert"
+                     attrs="{'invisible': ['|', ('release_required', '=', False), ('release_state', '!=', 'rejected')]}">
+                    <i class="fa fa-times" role="img" aria-label="Rejected" title="Rejected"/>
+                    <span>The release was rejected. Update the order and request the approval again.</span>
+                </div>
+            </xpath>
+
+            <!-- Strategy comes from the sales team: shown, never selected -->
+            <xpath expr="//group[@name='order_details']/field[@name='payment_term_id']" position="after">
+                <field name="team_release_strategy_id"
+                       attrs="{'invisible': [('release_required', '=', False)]}"/>
+            </xpath>
+
+            <!-- Sales team and salesperson are mandatory, team limited to the salesperson's teams -->
+            <xpath expr="//group[@name='sales_person']/field[@name='user_id']" position="attributes">
+                <attribute name="attrs">{'required': [('release_required', '=', True)]}</attribute>
+            </xpath>
+            <xpath expr="//group[@name='sales_person']/field[@name='team_id']" position="before">
+                <field name="so_release_team_ids" invisible="1"/>
+            </xpath>
+            <xpath expr="//group[@name='sales_person']/field[@name='team_id']" position="attributes">
+                <attribute name="domain">[('id', 'in', so_release_team_ids)]</attribute>
+                <attribute name="attrs">{'required': [('release_required', '=', True)]}</attribute>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Release Strategy" name="release_strategy"
+                      attrs="{'invisible': [('release_required', '=', False), ('release_line_ids', '=', [])]}">
+                    <group>
+                        <group>
+                            <field name="release_state" widget="badge"
+                                   decoration-info="release_state == 'draft'"
+                                   decoration-warning="release_state == 'pending'"
+                                   decoration-success="release_state in ('approved', 'not_required')"
+                                   decoration-danger="release_state == 'rejected'"/>
+                            <field name="release_strategy_id"/>
+                            <field name="release_currency_id" invisible="1"/>
+                            <field name="release_amount_company"/>
+                            <field name="release_reset_count" attrs="{'invisible': [('release_reset_count', '=', 0)]}"/>
+                        </group>
+                        <group>
+                            <field name="release_submit_date"/>
+                            <field name="release_approval_date"/>
+                            <field name="release_bypassed" attrs="{'invisible': [('release_bypassed', '=', False)]}"/>
+                            <field name="release_bypass_user_id" attrs="{'invisible': [('release_bypassed', '=', False)]}"/>
+                            <field name="release_bypass_reason" attrs="{'invisible': [('release_bypassed', '=', False)]}"/>
+                        </group>
+                    </group>
+                    <field name="release_line_ids" readonly="1">
+                        <tree decoration-muted="state in ('waiting', 'cancelled')"
+                              decoration-warning="state == 'pending'"
+                              decoration-success="state in ('approved', 'bypassed')"
+                              decoration-danger="state == 'rejected'">
+                            <field name="sequence" string="Stage"/>
+                            <field name="role"/>
+                            <field name="approver_type" optional="hide"/>
+                            <field name="approver_display"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="min_amount" optional="hide"/>
+                            <field name="max_amount" optional="hide"/>
+                            <field name="state" widget="badge"
+                                   decoration-warning="state == 'pending'"
+                                   decoration-success="state in ('approved', 'bypassed')"
+                                   decoration-danger="state == 'rejected'"/>
+                            <field name="assigned_date"/>
+                            <field name="approval_date"/>
+                            <field name="approved_by_id" widget="many2one_avatar_user"/>
+                            <field name="rejected_by_id" optional="hide" widget="many2one_avatar_user"/>
+                            <field name="notes"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Quotation list -->
+    <record id="view_quotation_tree_so_release" model="ir.ui.view">
+        <field name="name">sale.order.quotation.tree.so.release</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="release_state" optional="show" widget="badge"
+                       decoration-info="release_state == 'draft'"
+                       decoration-warning="release_state == 'pending'"
+                       decoration-success="release_state in ('approved', 'not_required')"
+                       decoration-danger="release_state == 'rejected'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Sales order list -->
+    <record id="view_order_tree_so_release" model="ir.ui.view">
+        <field name="name">sale.order.tree.so.release</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_status']" position="before">
+                <field name="release_state" optional="hide" widget="badge"
+                       decoration-warning="release_state == 'pending'"
+                       decoration-success="release_state in ('approved', 'not_required')"
+                       decoration-danger="release_state == 'rejected'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Filters: added to the base search view, inherited by the quotation
+         and sales order search views -->
+    <record id="view_sales_order_filter_so_release" model="ir.ui.view">
+        <field name="name">sale.order.list.select.so.release</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/group" position="before">
+                <separator/>
+                <filter name="my_release_approvals" string="My Release Approvals"
+                        domain="[('activity_ids.user_id', '=', uid), ('activity_ids.so_release_line_id', '!=', False)]"/>
+                <filter name="release_pending" string="Waiting Release" domain="[('release_state', '=', 'pending')]"/>
+                <filter name="release_approved" string="Released" domain="[('release_state', '=', 'approved')]"/>
+                <filter name="release_rejected" string="Release Rejected" domain="[('release_state', '=', 'rejected')]"/>
+            </xpath>
+            <xpath expr="//search/group" position="inside">
+                <filter name="group_release_state" string="Release Status" context="{'group_by': 'release_state'}"/>
+                <filter name="group_release_strategy" string="Release Strategy" context="{'group_by': 'release_strategy_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_so_release_my_approvals" model="ir.actions.act_window">
+        <field name="name">Release Approvals</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form,kanban,activity</field>
+        <field name="view_id" ref="sale.view_quotation_tree"/>
+        <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+        <field name="domain">[('release_state', '=', 'pending')]</field>
+        <field name="context">{'search_default_my_release_approvals': 1, 'create': False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No sales order is waiting for your approval</p>
+            <p>Orders waiting for your release approval will appear here.</p>
+        </field>
+    </record>
+</odoo>

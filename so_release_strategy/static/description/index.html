@@ -1,0 +1,198 @@
+<!-- Odoo Apps description page for so_release_strategy (Odoo 16.0). Inline styles only: apps.odoo.com strips <style> and <script> blocks. -->
+<section style="max-width:1120px;margin:0 auto;padding:0 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:#2b2b33;">
+
+<!-- ============================== HERO ============================== -->
+<div style="background:linear-gradient(120deg,#017E84 0%,#3d6b78 45%,#714B67 100%);border-radius:18px;padding:48px 40px 40px;color:#ffffff;margin-top:12px;">
+  <div style="font-size:13px;letter-spacing:2px;text-transform:uppercase;opacity:.85;margin-bottom:10px;">Sales &middot; Approvals &middot; Internal Control</div>
+  <h1 style="font-size:40px;line-height:1.15;font-weight:700;margin:0 0 14px;color:#ffffff;">Sales Order Release Strategy</h1>
+  <p style="font-size:19px;line-height:1.55;max-width:760px;margin:0 0 24px;color:#ffffff;opacity:.95;">Multi-level approvals for quotations, driven by the sales team. Each team gets a release strategy with amount-based stages, and no order is confirmed until the right people have released it.</p>
+  <div>
+    <span style="display:inline-block;border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:6px 14px;margin:0 8px 8px 0;font-size:14px;">Odoo 16.0</span>
+    <span style="display:inline-block;border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:6px 14px;margin:0 8px 8px 0;font-size:14px;">Community &amp; Enterprise</span>
+    <span style="display:inline-block;border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:6px 14px;margin:0 8px 8px 0;font-size:14px;">English &amp; Arabic</span>
+    <span style="display:inline-block;border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:6px 14px;margin:0 8px 8px 0;font-size:14px;">Technical name: so_release_strategy</span>
+    <span style="display:inline-block;border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:6px 14px;margin:0 8px 8px 0;font-size:14px;">LGPL-3</span>
+  </div>
+</div>
+
+<!-- ============================== KEY NUMBERS ============================== -->
+<div style="display:flex;flex-wrap:wrap;margin:28px -8px 8px;">
+  <div style="flex:1 1 220px;margin:8px;background:#f6f4f6;border-radius:14px;padding:20px 22px;"><div style="font-size:30px;font-weight:700;color:#714B67;">1 strategy / team</div><div style="font-size:15px;color:#555;">The sales team decides the approval path, not the salesperson</div></div>
+  <div style="flex:1 1 220px;margin:8px;background:#eef6f6;border-radius:14px;padding:20px 22px;"><div style="font-size:30px;font-weight:700;color:#017E84;">N stages</div><div style="font-size:15px;color:#555;">Sequential stages, parallel approvers inside a stage</div></div>
+  <div style="flex:1 1 220px;margin:8px;background:#f6f4f6;border-radius:14px;padding:20px 22px;"><div style="font-size:30px;font-weight:700;color:#714B67;">5 statuses</div><div style="font-size:15px;color:#555;">Not Submitted, Waiting Approval, Released, Rejected, No Approval Needed</div></div>
+  <div style="flex:1 1 220px;margin:8px;background:#eef6f6;border-radius:14px;padding:20px 22px;"><div style="font-size:30px;font-weight:700;color:#017E84;">2 activity types</div><div style="font-size:15px;color:#555;">Approvers are asked to approve; the salesperson is asked to confirm</div></div>
+</div>
+
+<!-- ============================== WHY ============================== -->
+<h2 style="font-size:28px;font-weight:700;margin:40px 0 6px;color:#2b2b33;">Why this module</h2>
+<p style="font-size:16px;color:#555;margin:0 0 18px;">Discount, price and credit decisions need a second pair of eyes before an order is confirmed. Standard Odoo has no release workflow for sales orders.</p>
+<div style="display:flex;flex-wrap:wrap;margin:0 -10px;">
+  <div style="flex:1 1 440px;margin:10px;border:1px solid #f1d6d6;background:#fff8f8;border-radius:14px;padding:24px 26px;">
+    <h3 style="font-size:19px;font-weight:700;color:#b33939;margin:0 0 12px;">In standard Odoo 16</h3>
+    <ul style="font-size:15px;line-height:1.65;margin:0;padding-left:20px;color:#3a3a42;">
+      <li>Any salesperson can press <b>Confirm</b> on a quotation of any amount.</li>
+      <li>There is <b>no approval workflow</b> for sales orders, by amount or by team.</li>
+      <li>Approvers are not told that an order is <b>waiting for them</b>.</li>
+      <li>After confirmation, <b>totals, lines and customer</b> can still change without review.</li>
+      <li>Nothing records <b>who approved what and when</b>.</li>
+      <li>Managers have no list of <b>orders waiting for their approval</b>.</li>
+    </ul>
+  </div>
+  <div style="flex:1 1 440px;margin:10px;border:1px solid #cfe7e7;background:#f4fbfb;border-radius:14px;padding:24px 26px;">
+    <h3 style="font-size:19px;font-weight:700;color:#017E84;margin:0 0 12px;">With this module</h3>
+    <ul style="font-size:15px;line-height:1.65;margin:0;padding-left:20px;color:#3a3a42;">
+      <li>Quotations in a strategy&rsquo;s amount range go to <b>Waiting Approval</b> instead of being confirmed.</li>
+      <li>Each <b>sales team</b> has its own <b>release strategy</b> with staged rules and amount ranges.</li>
+      <li>Every approver gets a <b>Sales Release Approval</b> activity with a deadline.</li>
+      <li><b>Locked Fields</b> on a confirmed order either reset the strategy or block the change.</li>
+      <li>A <b>Release Strategy</b> tab and the chatter keep a full audit trail per stage.</li>
+      <li><b>Sales &rsaquo; Orders &rsaquo; Release Approvals</b> lists exactly the orders waiting for you.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================== HOW IT WORKS ============================== -->
+<h2 style="font-size:28px;font-weight:700;margin:40px 0 6px;color:#2b2b33;">How it works</h2>
+<p style="font-size:16px;color:#555;margin:0 0 18px;">Four steps from setup to a released order.</p>
+<div style="display:flex;flex-wrap:wrap;margin:0 -8px;">
+  <div style="flex:1 1 200px;margin:8px;border-radius:12px;border:1px solid #e3dde2;padding:18px;"><div style="width:34px;height:34px;border-radius:50%;background:#714B67;color:#fff;font-weight:700;text-align:center;line-height:34px;margin-bottom:10px;">1</div><div style="font-weight:700;margin-bottom:4px;">Enable</div><div style="font-size:14px;color:#555;">Tick <b>Sales Release Strategies</b> in Sales settings.</div></div>
+  <div style="flex:1 1 200px;margin:8px;border-radius:12px;border:1px solid #e3dde2;padding:18px;"><div style="width:34px;height:34px;border-radius:50%;background:#714B67;color:#fff;font-weight:700;text-align:center;line-height:34px;margin-bottom:10px;">2</div><div style="font-weight:700;margin-bottom:4px;">Define</div><div style="font-size:14px;color:#555;">Create a strategy with staged rules and link it to each sales team.</div></div>
+  <div style="flex:1 1 200px;margin:8px;border-radius:12px;border:1px solid #e3dde2;padding:18px;"><div style="width:34px;height:34px;border-radius:50%;background:#714B67;color:#fff;font-weight:700;text-align:center;line-height:34px;margin-bottom:10px;">3</div><div style="font-weight:700;margin-bottom:4px;">Submit</div><div style="font-size:14px;color:#555;">The quotation is checked against its team&rsquo;s strategy; matching rules create approval lines and activities.</div></div>
+  <div style="flex:1 1 200px;margin:8px;border-radius:12px;border:1px solid #cfe7e7;background:#f4fbfb;padding:18px;"><div style="width:34px;height:34px;border-radius:50%;background:#017E84;color:#fff;font-weight:700;text-align:center;line-height:34px;margin-bottom:10px;">4</div><div style="font-weight:700;margin-bottom:4px;">Release</div><div style="font-size:14px;color:#555;">After the last stage the order is confirmed automatically, or the salesperson is asked to confirm it.</div></div>
+</div>
+
+<!-- ============================== FEATURES ============================== -->
+<h2 style="font-size:28px;font-weight:700;margin:40px 0 6px;color:#2b2b33;">Features</h2>
+<p style="font-size:16px;color:#555;margin:0 0 4px;">Screenshots use the Odoo demo database: strategy <b>team one</b> with a team lead (Marc Demo) and a manager (Mitchell Admin) for orders between 1,000 and 10,000&nbsp;SR untaxed.</p>
+
+<div style="margin:44px 0 0;">
+  <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Menus &amp; settings</div>
+  <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">One switch turns release strategies on</h3>
+  <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;"><b>Sales &rsaquo; Configuration &rsaquo; Settings &rsaquo; Release Strategies &rsaquo; Sales Release Strategies</b>. Once enabled, every sales team must have a default release strategy, and <b>Sales Team</b> and <b>Salesperson</b> become mandatory on quotations; the team must be one the salesperson belongs to. Shortcuts open <b>Release Strategies</b> and <b>Sales Teams</b>. New menus: <b>Sales &rsaquo; Orders &rsaquo; Release Approvals</b> and <b>Sales &rsaquo; Configuration &rsaquo; Release Strategies</b>.</p>
+  <img src="sors_01_settings.png" alt="Sales settings with the Sales Release Strategies option enabled" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+</div>
+
+<div style="margin:44px 0 0;">
+  <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 1</div>
+  <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Release strategies with staged, amount-based rules</h3>
+  <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Choose the <b>Amount Basis</b> (<b>Total (taxes included)</b> or <b>Untaxed Amount</b>, in company currency), an <b>Approval Deadline (Days)</b> for the activities, and what happens <b>After Final Approval</b>: <b>Confirm the order automatically</b> or <b>Notify the salesperson to confirm manually</b>. Each <b>Approval Rule</b> has a <b>Stage</b>, a <b>Role</b>, an approver (<b>Specific User</b> or <b>User Group</b>) and a <b>Minimum / Maximum Amount</b>. Smart buttons show the linked <b>Sales Teams</b> and <b>Orders</b>.</p>
+  <img src="sors_02_strategy_form.png" alt="Release strategy form with evaluation, after-approval options and approval rules" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+  <div style="background:#f4fbfb;border-left:4px solid #017E84;border-radius:8px;padding:16px 20px;font-size:15px;line-height:1.6;margin-top:14px;"><b>Rule:</b> a rule applies when the order amount is between its minimum and maximum; a maximum of <b>0</b> means no upper limit. Rules with the same stage are approved <b>in parallel</b>; the next stage starts when the current one is complete. Orders that match no rule get <b>No Approval Needed</b> and are confirmed directly. <i>Example:</i> S00046 at 1,770&nbsp;SR goes to the team lead (stage 1), then the manager (stage 2); S00045 at 295&nbsp;SR is below 1,000&nbsp;SR and needs no approval.</div>
+</div>
+
+<div style="margin:44px 0 0;">
+  <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 2</div>
+  <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Locked fields protect confirmed orders</h3>
+  <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">List the order fields that matter in <b>Locked Fields</b> (for example <b>Total</b>, <b>Order Lines</b>, <b>Customer</b>). Under <b>Changes on Confirmed Orders</b>, choose <b>Reset the release strategy</b> &ndash; the order is re-evaluated against its team&rsquo;s strategy, approvals are cleared and all approvers are notified again &ndash; or <b>Block the modification</b>. Changing the sales team or company counts too.</p>
+  <img src="sors_03_locked_fields.png" alt="Locked Fields tab of a release strategy" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+</div>
+
+<div style="margin:44px 0 0;">
+  <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 3</div>
+  <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">The sales team picks the strategy</h3>
+  <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Each sales team has a <b>Release Strategy</b> field, also shown as a column in <b>Sales &rsaquo; Configuration &rsaquo; Sales Teams</b>. Salespeople never choose a strategy on the order: the quotation shows its <b>Team Release Strategy</b> and uses it automatically.</p>
+  <img src="sors_04_team_list.png" alt="Sales Teams list with the Release Strategy column" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);margin-bottom:22px;"/>
+  <img src="sors_05_team_form.png" alt="Sales team form with the Release Strategy field" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+</div>
+
+<div style="margin:44px 0 0;">
+  <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 4</div>
+  <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Release status on every quotation</h3>
+  <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Quotation and order lists get a colored <b>Release Status</b> column. New filters: <b>My Release Approvals</b>, <b>Waiting Release</b>, <b>Released</b> and <b>Release Rejected</b>, plus grouping by release status and strategy.</p>
+  <img src="sors_06_quotations.png" alt="Quotations list with the Release Status column" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);margin-bottom:22px;"/>
+  <img src="sors_07_release_filters.png" alt="Filters menu with the release filters" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+</div>
+
+<div style="margin:44px 0 0;">
+  <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 5</div>
+  <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Waiting Approval step and Release Strategy tab</h3>
+  <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">The order status bar gets a <b>Waiting Approval</b> step between <b>Quotation Sent</b> and <b>Sales Order</b>. Approvers see <b>Approve</b> and <b>Reject</b> buttons; supervisors can <b>Bypass</b> or <b>Reset</b>. The <b>Release Strategy</b> tab shows <b>Release Status</b>, <b>Applied Release Strategy</b>, <b>Release Amount</b>, <b>Submitted On</b>, <b>Released On</b> and one line per approver with <b>Stage</b>, <b>Role</b>, <b>State</b>, <b>Assigned On</b>, <b>Approved On</b>, <b>Approved By</b> and <b>Approver Notes</b>.</p>
+  <img src="sors_08_order_released.png" alt="Sales order with the Waiting Approval step and Team Release Strategy" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);margin-bottom:22px;"/>
+  <img src="sors_09_release_tab.png" alt="Release Strategy tab with two approved stages" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+</div>
+
+<div style="margin:44px 0 0;">
+  <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 6</div>
+  <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Activities and a full audit trail</h3>
+  <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Each approver receives a <b>Sales Release Approval</b> activity when their stage starts; when the order is released with manual confirmation, the salesperson gets <b>Confirm Released Sales Order</b>. Submission, each approval, the status change and the release are all logged in the chatter.</p>
+  <img src="sors_10_audit_trail.png" alt="Chatter showing submission, stage approvals and release" style="width:100%;max-width:720px;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+</div>
+
+<div style="margin:44px 0 0;">
+  <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 7</div>
+  <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Release Approvals: your queue</h3>
+  <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;"><b>Sales &rsaquo; Orders &rsaquo; Release Approvals</b> opens with <b>My Release Approvals</b> applied, so approvers see only the orders waiting for them, in list or kanban.</p>
+  <img src="sors_11_my_approvals.png" alt="Release Approvals menu filtered on My Release Approvals" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+</div>
+
+<!-- ============================== STATUSES ============================== -->
+<h2 style="font-size:28px;font-weight:700;margin:40px 0 6px;color:#2b2b33;">Release statuses</h2>
+<p style="font-size:16px;color:#555;margin:0 0 18px;">What each status on an order means.</p>
+<div style="font-size:15px;line-height:1.6;">
+  <div style="margin-bottom:6px;"><span style="display:inline-block;min-width:150px;text-align:center;background:#dbeafe;color:#1d4ed8;border-radius:10px;padding:1px 8px;font-size:13px;margin-right:10px;">Not Submitted</span> quotation not yet evaluated against the team strategy</div>
+  <div style="margin-bottom:6px;"><span style="display:inline-block;min-width:150px;text-align:center;background:#fef3c7;color:#b45309;border-radius:10px;padding:1px 8px;font-size:13px;margin-right:10px;">Waiting Approval</span> at least one approval line is still pending</div>
+  <div style="margin-bottom:6px;"><span style="display:inline-block;min-width:150px;text-align:center;background:#d1fae5;color:#047857;border-radius:10px;padding:1px 8px;font-size:13px;margin-right:10px;">Released</span> all stages approved (or bypassed by a supervisor)</div>
+  <div style="margin-bottom:6px;"><span style="display:inline-block;min-width:150px;text-align:center;background:#fee2e2;color:#b91c1c;border-radius:10px;padding:1px 8px;font-size:13px;margin-right:10px;">Rejected</span> an approver rejected the order</div>
+  <div style="margin-bottom:6px;"><span style="display:inline-block;min-width:150px;text-align:center;background:#d1fae5;color:#047857;border-radius:10px;padding:1px 8px;font-size:13px;margin-right:10px;">No Approval Needed</span> the amount matches no rule; the order is confirmed directly</div>
+</div>
+<div style="background:#f4fbfb;border-left:4px solid #017E84;border-radius:8px;padding:16px 20px;font-size:15px;line-height:1.6;margin-top:14px;"><b>Approval line states:</b> Waiting (later stage), Pending Approval (current stage), Approved, Bypassed, Rejected, Cancelled.</div>
+
+<!-- ============================== CORNER CASES ============================== -->
+<h2 style="font-size:28px;font-weight:700;margin:40px 0 6px;color:#2b2b33;">Built for real-world corner cases</h2>
+<p style="font-size:16px;color:#555;margin:0 0 18px;">Details that matter once the workflow is live.</p>
+<div style="display:flex;flex-wrap:wrap;margin:0 -8px;font-size:15px;line-height:1.55;">
+  <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Wrong team on the order</b><br/><span style="color:#555;">Sales team and salesperson are mandatory, and the team must be one the salesperson belongs to.</span></div>
+  <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Foreign-currency quotations</b><br/><span style="color:#555;">Thresholds are compared in company currency (<b>Release Amount</b>), whatever the pricelist currency.</span></div>
+  <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Group approvers</b><br/><span style="color:#555;">A rule can target a <b>User Group</b>; any member can approve and the line shows the approvers.</span></div>
+  <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Urgent orders</b><br/><span style="color:#555;">A Release Supervisor can <b>Bypass</b> with a reason; <b>Bypassed By</b> and <b>Bypass Reason</b> stay on the order.</span></div>
+  <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Edits after approval</b><br/><span style="color:#555;">Changing a locked field resets approvals (counted in <b>Release Resets</b>) or is blocked, per strategy.</span></div>
+  <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Invoices and deliveries during re-approval</b><br/><span style="color:#555;">While a confirmed order waits for a new approval, or the new approval was refused, it cannot be invoiced &ndash; down payments included. With Inventory, deliveries for the added quantities are created only once it is approved again.</span></div>
+  <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Switching the feature off</b><br/><span style="color:#555;">Approvals still pending are cancelled and their activities removed; the approval history stays on each order and held deliveries are created.</span></div>
+  <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Small orders</b><br/><span style="color:#555;">Amounts outside every rule get <b>No Approval Needed</b> &ndash; no friction for routine sales.</span></div>
+  <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Multi-company</b><br/><span style="color:#555;">Strategies, rules and approval lines are company-specific, with record rules per company.</span></div>
+  <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Approvers outside Sales</b><br/><span style="color:#555;">Record rules let approvers open the orders they must approve.</span></div>
+  <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Arabic users</b><br/><span style="color:#555;">Full Arabic translation (ar_001) with right-to-left layout.</span></div>
+</div>
+
+<!-- ============================== SECURITY ============================== -->
+<h2 style="font-size:28px;font-weight:700;margin:40px 0 6px;color:#2b2b33;">Security</h2>
+<p style="font-size:16px;color:#555;margin:0 0 18px;">Who can do what.</p>
+<table style="width:100%;border-collapse:collapse;font-size:15px;">
+  <thead><tr style="background:#714B67;color:#fff;"><th style="text-align:left;padding:10px 14px;">Who</th><th style="text-align:left;padding:10px 14px;">Can</th></tr></thead>
+  <tbody>
+    <tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;">Salesperson</td><td style="padding:10px 14px;">Submit quotations and follow their release status</td></tr>
+    <tr style="border-bottom:1px solid #eee;background:#fafafa;"><td style="padding:10px 14px;">Approver (user or group on a rule)</td><td style="padding:10px 14px;">Approve or reject the lines of the current stage; sees the orders waiting for them</td></tr>
+    <tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;">Release Supervisor</td><td style="padding:10px 14px;">Bypass and reset sales order release strategies</td></tr>
+    <tr style="border-bottom:1px solid #eee;background:#fafafa;"><td style="padding:10px 14px;">Sales Administrator</td><td style="padding:10px 14px;">Create and edit release strategies and rules</td></tr>
+    <tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;">Multi-company</td><td style="padding:10px 14px;">Strategies, rules and approval lines are limited to the user&rsquo;s allowed companies</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================== TECHNICAL ============================== -->
+<h2 style="font-size:28px;font-weight:700;margin:40px 0 6px;color:#2b2b33;">Technical details</h2>
+<p style="font-size:16px;color:#555;margin:0 0 18px;">For the implementer.</p>
+<table style="width:100%;border-collapse:collapse;font-size:15px;">
+  <tbody>
+    <tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;width:240px;color:#777;">Odoo version</td><td style="padding:10px 14px;">16.0, Community and Enterprise</td></tr>
+    <tr style="border-bottom:1px solid #eee;background:#fafafa;"><td style="padding:10px 14px;width:240px;color:#777;">Depends on</td><td style="padding:10px 14px;"><code>sale</code>, <code>mail</code></td></tr>
+    <tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;width:240px;color:#777;">Inventory integration</td><td style="padding:10px 14px;"><code>so_release_strategy_stock</code>, installed automatically with Inventory (<code>sale_stock</code>): holds new deliveries during re-approval</td></tr>
+    <tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;width:240px;color:#777;">Menus</td><td style="padding:10px 14px;">Sales &rsaquo; Orders &rsaquo; Release Approvals; Sales &rsaquo; Configuration &rsaquo; Release Strategies</td></tr>
+    <tr style="border-bottom:1px solid #eee;background:#fafafa;"><td style="padding:10px 14px;width:240px;color:#777;">Settings</td><td style="padding:10px 14px;">Sales &rsaquo; Configuration &rsaquo; Settings &rsaquo; Release Strategies &rsaquo; Sales Release Strategies</td></tr>
+    <tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;width:240px;color:#777;">Models</td><td style="padding:10px 14px;"><code>so.release.strategy</code>, <code>so.release.strategy.rule</code>, <code>sale.order.release.line</code>, <code>so.release.action.wizard</code>; extends <code>sale.order</code>, <code>crm.team</code>, <code>res.company</code>, <code>res.config.settings</code></td></tr>
+    <tr style="border-bottom:1px solid #eee;background:#fafafa;"><td style="padding:10px 14px;width:240px;color:#777;">Activity types</td><td style="padding:10px 14px;">Sales Release Approval; Confirm Released Sales Order</td></tr>
+    <tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;width:240px;color:#777;">Security group</td><td style="padding:10px 14px;">Sales Release Strategy / Release Supervisor</td></tr>
+    <tr style="border-bottom:1px solid #eee;background:#fafafa;"><td style="padding:10px 14px;width:240px;color:#777;">Languages</td><td style="padding:10px 14px;">English, Arabic (ar_001)</td></tr>
+    <tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;width:240px;color:#777;">License</td><td style="padding:10px 14px;">LGPL-3</td></tr>
+  </tbody>
+</table>
+
+<!-- ============================== CONTACT ============================== -->
+<div style="margin:52px 0 40px;background:linear-gradient(120deg,#714B67 0%,#017E84 100%);border-radius:18px;padding:36px 40px;color:#fff;">
+  <h2 style="font-size:26px;font-weight:700;margin:0 0 8px;color:#fff;">Support &amp; customization</h2>
+  <p style="font-size:16px;line-height:1.6;margin:0 0 20px;color:#fff;opacity:.95;">Questions, a demo, or an adaptation to your own process? Get in touch.</p>
+  <a href="mailto:ibrahim.yahiah@gmail.com" style="display:inline-block;background:#fff;color:#714B67;font-weight:700;text-decoration:none;border-radius:8px;padding:12px 22px;margin:0 12px 10px 0;">&#9993;&nbsp; ibrahim.yahiah@gmail.com</a>
+  <a href="https://www.linkedin.com/in/ibrahim-yahia" target="_blank" rel="noopener" style="display:inline-block;border:2px solid #fff;color:#fff;font-weight:700;text-decoration:none;border-radius:8px;padding:10px 22px;margin:0 0 10px 0;">LinkedIn: Ibrahim Yahia</a>
+  <p style="font-size:13px;margin:14px 0 0;opacity:.8;color:#fff;">Author: Ibrahim Yahia &middot; License: LGPL-3</p>
+</div>
+
+</section>

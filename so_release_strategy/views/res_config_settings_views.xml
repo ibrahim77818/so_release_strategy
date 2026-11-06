@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_so_release" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.so.release</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@data-key='sale_management']" position="inside">
+                <h2>Release Strategies</h2>
+                <div class="row mt16 o_settings_container" name="so_release_setting_container">
+                    <div class="col-12 col-lg-6 o_setting_box" id="so_release_strategy">
+                        <div class="o_setting_left_pane">
+                            <field name="so_release_strategy_enabled"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="so_release_strategy_enabled"/>
+                            <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
+                            <div class="text-muted">
+                                Require the approval of the sales team release strategy before confirming sales orders
+                            </div>
+                            <div class="text-muted mt8">
+                                Each sales team must have a default release strategy. Quotations are evaluated against
+                                the strategy of their team; sales team and salesperson become mandatory and the team must
+                                be one the salesperson belongs to.
+                            </div>
+                            <div class="text-muted mt8">
+                                Switching it off cancels the approvals still pending; the approval history is kept.
+                            </div>
+                            <div class="mt8">
+                                <button name="%(so_release_strategy.action_so_release_strategy)d" type="action"
+                                        string="Release Strategies" icon="fa-arrow-right" class="btn-link"/>
+                            </div>
+                            <div>
+                                <button name="%(sales_team.crm_team_action_config)d" type="action"
+                                        string="Sales Teams" icon="fa-arrow-right" class="btn-link"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

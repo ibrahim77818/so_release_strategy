@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="crm_team_view_form_so_release" model="ir.ui.view">
+        <field name="name">crm.team.form.so.release</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='left']/field[@name='user_id']" position="after">
+                <field name="so_release_required" invisible="1"/>
+                <field name="so_release_allowed_strategy_ids" invisible="1"/>
+                <field name="so_release_strategy_id" options="{'no_create': True}"
+                       attrs="{'required': [('so_release_required', '=', True)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="crm_team_view_tree_so_release" model="ir.ui.view">
+        <field name="name">crm.team.tree.so.release</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sales_team.crm_team_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="so_release_strategy_id" optional="show" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

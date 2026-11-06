@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mail_activity_type_so_release" model="mail.activity.type">
+            <field name="name">Sales Release Approval</field>
+            <field name="summary">Sales order release approval</field>
+            <field name="icon">fa-check-square-o</field>
+            <field name="res_model">sale.order</field>
+            <field name="delay_count">1</field>
+            <field name="sequence">50</field>
+        </record>
+        <record id="mail_activity_type_so_release_confirm" model="mail.activity.type">
+            <field name="name">Confirm Released Sales Order</field>
+            <field name="summary">Confirm the released sales order</field>
+            <field name="icon">fa-handshake-o</field>
+            <field name="res_model">sale.order</field>
+            <field name="sequence">51</field>
+        </record>
+    </data>
+</odoo>

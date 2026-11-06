@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_so_release_my_approvals"
+              name="Release Approvals"
+              parent="sale.sale_order_menu"
+              action="action_so_release_my_approvals"
+              groups="sales_team.group_sale_salesman"
+              sequence="25"/>
+    <menuitem id="menu_so_release_strategy"
+              name="Release Strategies"
+              parent="sale.menu_sale_config"
+              action="action_so_release_strategy"
+              sequence="25"
+              groups="sales_team.group_sale_manager"/>
+</odoo>
